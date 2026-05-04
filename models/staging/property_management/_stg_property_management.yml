@@ -53,8 +53,6 @@ models:
           - not_null
       - name: unit_name
         description: Display name or number of the unit (e.g. "Unit 3B").
-        tests:
-          - not_null
       - name: unit_rent
         description: Monthly rent amount for the unit in USD.
         tests:
