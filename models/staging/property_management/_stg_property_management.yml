@@ -81,7 +81,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['available', 'occupied', 'maintenance', 'vacant']
+                values: ['occupied', 'vacant', 'construction', 'rented']
       - name: address_1
         description: Primary street address line of the unit.
       - name: address_2
