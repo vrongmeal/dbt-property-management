@@ -64,8 +64,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_property_management__properties')
-              field: property_id
+              arguments:
+                to: ref('stg_property_management__properties')
+                field: property_id
       - name: unit_bedrooms
         description: Number of bedrooms in the unit.
         tests:
@@ -81,7 +82,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['available', 'occupied', 'maintenance', 'vacant']
+              arguments:
+                values: ['available', 'occupied', 'maintenance', 'vacant']
       - name: address_1
         description: Primary street address line of the unit.
       - name: address_2
