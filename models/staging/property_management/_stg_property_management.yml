@@ -1,0 +1,165 @@
+models:
+  - name: stg_property_management__properties
+    description: Staged property records with renamed and standardized columns.
+    columns:
+      - name: property_id
+        description: Primary key for a property.
+        tests:
+          - not_null
+          - unique
+      - name: property_created_at
+        description: Timestamp when the property record was created.
+        tests:
+          - not_null
+      - name: property_name
+        description: Display name of the property.
+        tests:
+          - not_null
+      - name: property_address
+        description: Street address of the property.
+        tests:
+          - not_null
+      - name: property_city
+        tests:
+          - not_null
+      - name: property_state
+        tests:
+          - not_null
+      - name: property_zip_code
+        tests:
+          - not_null
+      - name: property_type
+        description: Classification of the property (e.g. residential, commercial).
+        tests:
+          - not_null
+      - name: property_year_built
+        description: Year the property was constructed.
+      - name: property_uploaded_at
+        description: Timestamp when the record was loaded into the raw layer.
+        tests:
+          - not_null
+
+  - name: stg_property_management__units
+    description: Staged unit records. Each row represents one rentable unit within a property.
+    columns:
+      - name: unit_id
+        description: Primary key for a unit.
+        tests:
+          - not_null
+          - unique
+      - name: unit_created_at
+        description: Timestamp when the unit record was created.
+        tests:
+          - not_null
+      - name: unit_name
+        description: Display name or number of the unit (e.g. "Unit 3B").
+      - name: unit_rent
+        description: Monthly rent amount for the unit in USD.
+        tests:
+          - not_null
+      - name: property_id
+        description: Foreign key to the parent property.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_property_management__properties')
+                field: property_id
+      - name: unit_bedrooms
+        description: Number of bedrooms in the unit.
+        tests:
+          - not_null
+      - name: unit_bathrooms
+        description: Number of bathrooms in the unit.
+        tests:
+          - not_null
+      - name: unit_square_feet
+        description: Total square footage of the unit.
+      - name: unit_status
+        description: "{{ doc('unit_status') }}"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['occupied', 'vacant', 'construction', 'rented']
+      - name: address_1
+        description: Primary street address line of the unit.
+      - name: address_2
+        description: Secondary address line (suite, apt, etc.).
+      - name: city
+        tests:
+          - not_null
+      - name: state
+        tests:
+          - not_null
+      - name: zip_code
+        tests:
+          - not_null
+      - name: uploaded_at
+        description: Timestamp when the record was loaded into the raw layer.
+        tests:
+          - not_null
+
+  - name: stg_property_management__leases
+    description: Staged lease agreements linking tenants (via rental applications) to units.
+    columns:
+      - name: lease_id
+        description: Primary key for a lease.
+        tests:
+          - not_null
+          - unique
+      - name: lease_created_at
+        description: Timestamp when the lease record was created.
+        tests:
+          - not_null
+      - name: unit_id
+        description: Foreign key to the leased unit.
+        tests:
+          - not_null
+      - name: lease_start_date
+        description: Date the lease term begins.
+        tests:
+          - not_null
+      - name: lease_end_date
+        description: Date the lease term ends.
+        tests:
+          - not_null
+      - name: rental_application_id
+        description: Foreign key to the associated rental application.
+        tests:
+          - not_null
+      - name: lease_completed
+        description: Boolean indicating whether the lease has been fully executed.
+        tests:
+          - not_null
+      - name: lease_uploaded_at
+        description: Timestamp when the record was loaded into the raw layer.
+        tests:
+          - not_null
+
+  - name: stg_property_management__rental_applications
+    description: Staged rental applications submitted by prospective tenants.
+    columns:
+      - name: rental_application_id
+        description: Primary key for a rental application.
+        tests:
+          - not_null
+          - unique
+      - name: rental_application_created_at
+        description: Timestamp when the application was submitted.
+        tests:
+          - not_null
+      - name: rental_application_deleted_at
+        description: Timestamp when the application was soft-deleted, if applicable.
+      - name: rental_application_status
+        description: Current status of the application (e.g. pending, approved, denied).
+        tests:
+          - not_null
+      - name: contact_info_id
+        description: Foreign key to the applicant's contact information record.
+        tests:
+          - not_null
+      - name: rental_application_uploaded_at
+        description: Timestamp when the record was loaded into the raw layer.
+        tests:
+          - not_null
