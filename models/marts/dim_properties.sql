@@ -4,7 +4,7 @@ with
 
     units as (select * from {{ ref("stg_property_management__units") }}),
 
-    joined as (
+    renamed as (
 
         select
             units.unit_id,
@@ -35,4 +35,4 @@ with
     )
 
 select *
-from joined
+from renamed
